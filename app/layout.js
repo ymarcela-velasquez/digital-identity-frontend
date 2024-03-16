@@ -1,5 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+// Archivo padre que contiene todas las páginas
+//todo lo que ponga acá se verá en todas las páginas
+// componentes globales
+
 
 const inter = Inter({ subsets: ["latin"] });
 
