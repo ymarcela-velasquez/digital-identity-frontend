@@ -11,7 +11,7 @@ export const Login = ({ setUser }) => {
   const [emailError, setEmailError] = useState(false)
 
   const handleChangeIdentification = (event) => {
-    // Validate that identification is numerical and iths length doesn't exceed 10 characters
+    // Validate that identification is numerical and its length doesn't exceed 10 characters
     const value = event.target.value    
     if (!isNaN(value) && value.length <= 10) {
       setIdentification(value)
