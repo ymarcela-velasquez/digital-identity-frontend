@@ -1,6 +1,6 @@
 import Image from "next/image";
 import logo from '../public/assets/identidad.png';
-import { LoginForm } from './components/LoginForm';
+import { LoginForm } from '@/components/custom/LoginForm';
 import Link from 'next/link'
 
 export default function HomePage() {

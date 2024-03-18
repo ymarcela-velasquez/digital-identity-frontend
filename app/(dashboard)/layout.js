@@ -1,4 +1,4 @@
-import SideNav from "../components/SideNav";
+import SideNav from "@/components/custom/SideNav";
 
 export const metadata = {
   title: "Digital Identity App",

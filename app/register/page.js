@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react';
-import { RegisterForm } from '../components/RegisterForm';
+import { RegisterForm } from '@/components/custom/RegisterForm';
 
 export default function HomePage() {
   const [user, setUser] = useState([])
