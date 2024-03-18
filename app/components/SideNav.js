@@ -2,18 +2,22 @@ import Link from 'next/link';
 import NavLinks from './NavLinks';
 import AcmeLogo from './AcmeLogo';
 import { PowerIcon } from '@heroicons/react/24/outline';
+import Image from "next/image";
+import logo from '@/public/assets/identidad.png';
 
 export default function SideNav() {
   return (
-    <div className="flex h-full flex-col px-3 py-4 md:px-2">
-      <Link
-        className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
-        href="/"
-      >
-        <div className="w-4 text-white md:w-40">
-          <AcmeLogo />
+    <div className="flex h-full flex-col px-3 py-4 md:px-2 bg-gray-100">
+      <div className="mb-2 flex h-auto items-center justify-start p-4 gap-4">
+        <Link href="/">
+          <Image src={logo} className='h-12 w-auto' alt="logo" />
+        </Link>
+        <div>
+          <span className='text-[#186077] font-bold text-lg leading-1'>
+            Identidad Digital
+          </span>
         </div>
-      </Link>
+      </div>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks />
         {/* <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div> */}
