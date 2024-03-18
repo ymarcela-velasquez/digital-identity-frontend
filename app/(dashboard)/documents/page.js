@@ -1,9 +1,5 @@
-"use client"
+// "use client"
 // para componentes que tienen onCick, useState, etc (eventos)
-
-import Image from "next/image";
-
-
 
 export default function DocumentPage() {
   return (
