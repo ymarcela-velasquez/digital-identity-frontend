@@ -17,9 +17,8 @@ import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
   email: z.string().email({message: "Debes agregar un email valido."}),
-  password: z.string().min(7, {message: "La contraseña debe contener al menos 7 caracteres."}).max(30)
+  password: z.string().min(7, {message: "La contraseña debe contener al menos 7 caracteres."}).max(15)
 })
-
 
 export const LoginForm = () => {
 
@@ -64,7 +63,7 @@ export const LoginForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Contraseña</FormLabel>
                   <FormControl>
                     <Input placeholder="Password" type='password' {...field} />
                   </FormControl>
@@ -72,7 +71,7 @@ export const LoginForm = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Enviar</Button>
           </form>
         </Form>
       </section>
