@@ -1,172 +1,106 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { useState } from 'react'
+'use client'
+
+import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useRouter } from 'next/navigation'
 import {
-  ArrowDownOnSquareIcon,PencilSquareIcon,ArchiveBoxXMarkIcon,
-} from '@heroicons/react/24/outline';
+  ArrowDownOnSquareIcon,
+  PencilSquareIcon,
+  ArchiveBoxXMarkIcon,
+} from '@heroicons/react/24/outline'
 
-export const Transfer = ({user}) => {
-  const [documents, setDocuments] = useState([]);
-  const [newDocument, setNewDocument] = useState(null);
-  const [loading, setLoading] = useState(false);
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { FormSelect } from "@/components/custom/FormSelect"
 
-  const operadores = [
-    {
-      "OperatorId": "65ca0a00d833e984e2608756",
-      "OperatorName": "Operador 123",
-      "transferAPIURL": "http://mioperador.com/api/transferCitizen"
-    },
-    {
-      "OperatorId": "65ca0a00d833e984e2608758",
-      "OperatorName": "Operador 456",
-      "transferAPIURL": "http://mioperador.com/api/transferCitizen"
-    },
-    {
-      "OperatorId": "65ca0a00d833e984e2608761",
-      "OperatorName": "Operador 789",
-      "transferAPIURL": "http://mioperador.com/api/transferCitizen"
+const formSchema = z.object({
+  operator: z.string()
+})
+
+export const Transfer = ({operators}) => {
+  // const [operators, setOperators] = useState([])
+  // const router = useRouter();
+  const [userData, setUserData] = useState(null) 
+  // const [selectedOperator, setSelectedOperator] = useState('') 
+
+  useEffect(() => {
+    const storedData = localStorage.getItem('userData');
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setUserData(parsedData)
     }
-  ]
+  }, [])
 
-  const getOperators = async () => {
-    try {
-      const operators = await axios.get(`https://govcarpeta-21868b7e9dd3.herokuapp.com/apis/getOperators`)
-      // Update the documents list after signing
-      console.log('operators: ', operators);
-    } catch (error) {
-      console.error('Error al obtener operadores:', error)
-    }
-  }
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      operator: "",
+    },
+  })
 
+  async function onSubmit(values) {
+    // Hacer algo con los valores del formulario.
+    const response = await axios.post('http://34.136.184.165:8080/api-gateway/transfers', {
+      operator_id: values.operator,
+      email: userData.email,
+      identification: userData.identification
+    })
+    console.log('response', response)
   
- 
-  const mockDocuments = [ 
-    { id: '1', title: 'archivo1.pdf', url: 'url.com', updatedAt: '2024-03-20'},
-    { id: '2', title: 'archivo1.pdf', url: 'url', updatedAt: '2024-03-20'},
-    { id: '3', title: 'archivo1.pdf', url: 'url', updatedAt: '2024-03-20'},
-    { id: '4', title: 'archivo1.pdf', url: 'url', updatedAt: '2024-03-20'},
-   ]
-  const signDocument = async (documentId) => {
-    try {
-      await axios.post(`/documents/sign`, { documentId })
-      // Update the documents list after signing
-      loadDocuments()
-    } catch (error) {
-      console.error('Error al firmar el documento:', error)
-    }
-  };
-
-  // Función para cargar un nuevo documento
-  const handleFileUpload = async () => {
-    if (!newDocument) return
-    setLoading(true)
-    try {
-      await axios.post(`/documents`, { file: newDocument })    
-      // Update the documents list after uploading a new document
-      loadDocuments()
-    } catch (error) {
-      console.error('Error al cargar el nuevo documento:', error)
-    } finally {
-      setLoading(false);
-      // Clean the new document state
-      setNewDocument(null)
-    }
+    // Redirigir al usuario al dashboard.
+    // router.push('/dashboard');
   }
 
   return (
-    <section
-      style={{
-        display: 'flex',
-        justifyContent: 'flex-start',
-        flexDirection: 'column',
-      }}
-    >
-      <div>
-        <Table style={{width: '800px', overflowX: 'auto'}}>
-          <TableHeader>
-            <TableRow className="h-[70px]">
-              <TableHead className="w-[500px]">Solicitar Traslado</TableHead>
-              <TableHead className="w-[500px]">
-                Consultar estado del traslado
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow key={document.id} className="h-[50px]">
-              <TableCell style={{verticalAlign: 'top', textAlign: 'left'}}>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
-                  <label style={{marginBottom: '10px'}}>
-                    Aquí debes seleccionar a qué operador quieres ser
-                    trasladado:
-                  </label>
-                  <select
-                    style={{
-                      marginBottom: '10px',
-                      padding: '8px 16px',
-                      fontSize: '16px',
-                    }}
-                  >
-                    {operadores.map(operador => (
-                      <option
-                        key={operador.OperatorId}
-                        value={operador.OperatorId}
-                      >
-                        {operador.OperatorName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </TableCell>
-              <TableCell style={{verticalAlign: 'top', textAlign: 'left'}}>
-                <label>Aquí puedes consultar el estado de tu solicitud</label>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell style={{verticalAlign: 'top', textAlign: 'center'}}>
-                <Button
-                  style={{
-                    padding: '8px 16px',
-                    fontSize: '16px',
-                    backgroundColor: '#186077',
-                    display: 'block',
-                    margin: '0 auto',
-                  }}
-                  onClick={handleFileUpload}
-                  disabled={loading || !newDocument}
-                >
-                  Solicitar
-                </Button>
-              </TableCell>
-              <TableCell style={{verticalAlign: 'top', textAlign: 'center'}}>
-                <Button
-                  style={{
-                    padding: '8px 16px',
-                    fontSize: '16px',
-                    backgroundColor: '#186077',
-                    display: 'block',
-                    margin: '0 auto',
-                  }}
-                  onClick={handleFileUpload}
-                  disabled={loading || !newDocument}
-                >
-                  Consultar
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
-    </section>
+
+    <div className="container flex">
+      <div className="w-1/2">
+        <h2>Aquí puedes solicitar traslado a otro operador</h2>
+        <hr className="my-5"/>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="operator"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>Selecciona un operador</FormLabel>
+                  <FormSelect {...field}
+                    options={operators}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          
+            <Button
+              className="bg-[#186077] rounded text-white"
+              type="submit"
+            >
+              Enviar
+            </Button>
+          </form>
+        </Form>
+      </div>      
+    </div>
   )
 }

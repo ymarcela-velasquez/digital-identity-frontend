@@ -1,7 +1,7 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { Tooltip } from "@nextui-org/react"
-import { useState } from 'react'
+'use client'
+import {Button} from '@/components/ui/button'
+import {Tooltip} from '@nextui-org/react'
+import {useState} from 'react'
 import axios from 'axios'
 import {
   Table,
@@ -11,60 +11,128 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table'
 
 import {
-  ArrowDownOnSquareIcon,PencilSquareIcon,ArchiveBoxXMarkIcon,
-} from '@heroicons/react/24/outline';
+  ArrowDownOnSquareIcon,
+  PencilSquareIcon,
+  ArchiveBoxXMarkIcon,
+} from '@heroicons/react/24/outline'
 
 export const DocumentManager = ({user}) => {
-  const [documents, setDocuments] = useState([]);
-  const [newDocument, setNewDocument] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [documents, setDocuments] = useState([])
+  const [newDocument, setNewDocument] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [selectedFileName, setSelectedFileName] = useState('')
+  const maxFileSizeMB = 1
+  const [userData, setUserData] = useState(null)
 
-  // Función para cargar los documentos del usuario
-  const loadDocuments = async () => {
-    // try {
-    //   const response = await axios.get(`/documentos/${user}`);
-    //   setDocuments(response.data);
-    // } catch (error) {
-    //   console.error('Error al cargar los documentos:', error);
-    // }
+  useEffect(() => {
+    const storedData = localStorage.getItem('userData')
+    if (storedData) {
+      const parsedData = JSON.parse(storedData)
+      setUserData(parsedData)
+    }
+  }, [])
 
+  console.log('storedData: ', storedData)
 
-    setDocuments(mockDocuments);
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const response = await axios.get(
+          `http://34.136.184.165:8080/api-gateway/documents/${storedData.email}`,
+        )
+        setDocuments(response.data)
+      } catch (error) {
+        console.error('Error fetching operators:', error)
+      }
+    }
+    fetchDocuments()
+  }, [])
+
+  // Function to get user's documents
+  const getDocumentsByUser = async () => {
+    try {
+      const response = await axios.get(`http://34.136.184.165:8080/api-gateway/documents/:email`);
+      setDocuments(response.data)
+    } catch (error) {
+      console.error('Error al cargar los documentos:', error)
+    }
+
+    // setDocuments(mockDocuments);
   }
 
-  const mockDocuments = [ 
-    { id: '1', title: 'archivo1.pdf', url: 'url.com', updatedAt: '2024-03-20'},
-    { id: '2', title: 'archivo1.pdf', url: 'url', updatedAt: '2024-03-20'},
-    { id: '3', title: 'archivo1.pdf', url: 'url', updatedAt: '2024-03-20'},
-    { id: '4', title: 'archivo1.pdf', url: 'url', updatedAt: '2024-03-20'},
-   ]
-  const signDocument = async (documentId) => {
+  const mockDocuments = [
+    {id: '1', title: 'archivo1.pdf', url: 'url.com', updatedAt: '2024-03-20'},
+    {id: '2', title: 'archivo1.pdf', url: 'url', updatedAt: '2024-03-20'},
+    {id: '3', title: 'archivo1.pdf', url: 'url', updatedAt: '2024-03-20'},
+    {id: '4', title: 'archivo1.pdf', url: 'url', updatedAt: '2024-03-20'},
+  ]
+
+  const uploadDocument = async base64Data => {
+    console.log('entra a cargar documento: ', base64Data)
     try {
-      await axios.post(`/documents/sign`, { documentId })
+      await axios.post(`http://34.136.184.165:8080/api-gateway/documents`, {
+        file: base64Data,
+      })
+      getDocumentsByUser()
+    } catch (error) {
+      console.error('Error al cargar el nuevo documento:', error)
+    }
+  }
+
+  const signDocument = async documentId => {
+    try {
+      await axios.post(`http://34.136.184.165:8080/api-gateway/sign-document`, {
+        idCitizen: storedData.identification,
+        urlDocument: '',
+        documentTitle: '',
+        email: storedData.email,
+      })
       // Update the documents list after signing
-      loadDocuments()
+      getDocumentsByUser()
     } catch (error) {
       console.error('Error al firmar el documento:', error)
     }
-  };
+  }
 
-  // Función para cargar un nuevo documento
+  // Show selected file
+  const handleFileChange = e => {
+    const file = e.target.files[0]
+    setNewDocument(file)
+    setSelectedFileName(file.name)
+  }
+
+  // Function to upload a new document
   const handleFileUpload = async () => {
     if (!newDocument) return
     setLoading(true)
+
     try {
-      await axios.post(`/documents`, { file: newDocument })    
+      const file = newDocument
+      console.log('file: ', file.size)
+      if (file.size > maxFileSizeMB * 1024 * 1024) {
+        throw new Error(
+          `El archivo es demasiado grande. El tamaño máximo permitido es ${maxFileSizeMB} MB.`,
+        )
+      }
+      console.log('file: ', file)
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = async () => {
+        const base64Data = reader.result.split(',')[1]
+        await uploadDocument(base64Data)
+      }
       // Update the documents list after uploading a new document
-      loadDocuments()
+      getDocumentsByUser()
     } catch (error) {
       console.error('Error al cargar el nuevo documento:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
       // Clean the new document state
       setNewDocument(null)
+      setSelectedFileName('')
     }
   }
 
@@ -136,7 +204,8 @@ export const DocumentManager = ({user}) => {
           Agregar nuevo documento
         </h3>
         <label style={{color: '#333', marginBottom: '10px'}}>
-          Se aceptan archivos PDF, .doc, .docx
+          Se aceptan todos los formatos de archivos, pero el tamaño máximo
+          permitido es de 1MB
         </label>
         <div>
           <label
@@ -156,9 +225,12 @@ export const DocumentManager = ({user}) => {
             id="fileInput"
             type="file"
             style={{display: 'none'}}
-            onChange={e => setNewDocument(e.target.files[0])}
-            accept=".pdf,.doc,.docx"
+            onChange={handleFileChange}
+            accept=".pdf,.doc,.docx, .png"
           />
+          {selectedFileName && (
+            <span style={{marginLeft: '10px'}}>{selectedFileName}</span>
+          )}
           <Button
             style={{
               marginLeft: '20px',

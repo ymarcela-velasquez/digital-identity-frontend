@@ -12,7 +12,7 @@ export default function HomePage() {
           <h1 className="text-[#186077] text-4xl font-bold">Identidad Digital</h1>
          </div>
           <LoginForm/> 
-          <p>¿No tienes una cuenta? <Link href='/register'>Regístrate aquí</Link></p>
+          <p>¿No tienes una cuenta? <Link href='/validate-user'>Regístrate aquí</Link></p>
       </div>
     </main>
   );

@@ -63,10 +63,11 @@ export const RegisterForm = ({onSubmit}) => {
     }
     
     try {
-      const response = await axios.post('http://34.118.205.255:8080/broker-intermediary/citizen', formData, {
+      const response = await axios.post('http://34.136.184.165:8080/api-gateway/citizens', formData, {
         timeout: 5000,
       })
       if (response.status === 201) {
+        localStorage.setItem('userData', JSON.stringify({ identification: formData.identification, email: formData.email }))
         setAlert({ show: true, message: "Su registro fue exitoso", type: "success" })
         setTimeout(() => {
           router.push('/dashboard')

@@ -43,7 +43,7 @@ export const ValidateUserForm = ({onSubmit}) => {
   })
 
   const handleFormSubmit = async event => {
-    event.preventDefault() // Prevenir el envío predeterminado del formulario
+    event.preventDefault()
     const formData = {
       identification: form.getValues('identification'),
     }
