@@ -33,9 +33,7 @@ export const DocumentManager = ({user}) => {
       const parsedData = JSON.parse(storedData)
       setUserData(parsedData)
     }
-  }, [])
-
-  console.log('storedData: ', storedData)
+  }, [])  
 
   useEffect(() => {
     const fetchDocuments = async () => {
