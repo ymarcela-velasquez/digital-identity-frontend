@@ -40,6 +40,7 @@ export const Transfer = ({operators}) => {
   // const [operators, setOperators] = useState([])
   // const router = useRouter();
   const [userData, setUserData] = useState(null) 
+  const [alert, setAlert] = useState({show: false, message: '', type: ''})
   // const [selectedOperator, setSelectedOperator] = useState('') 
 
   useEffect(() => {
@@ -57,14 +58,16 @@ export const Transfer = ({operators}) => {
     },
   })
 
-  async function onSubmit(values) {
-    // Hacer algo con los valores del formulario.
+  async function onSubmit(values) {    
     const response = await axios.post('http://34.136.184.165:8080/api-gateway/transfers', {
       operator_id: values.operator,
       email: userData.email,
       identification: userData.identification
     })
-    console.log('response', response)
+
+    
+    console.log('response', response.data)
+    
   
     // Redirigir al usuario al dashboard.
     // router.push('/dashboard');

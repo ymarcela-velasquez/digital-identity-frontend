@@ -1,7 +1,7 @@
 'use client'
 import {Button} from '@/components/ui/button'
 import {Tooltip} from '@nextui-org/react'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import axios from 'axios'
 import {
   Table,
@@ -54,7 +54,7 @@ export const DocumentManager = ({user}) => {
   // Function to get user's documents
   const getDocumentsByUser = async () => {
     try {
-      const response = await axios.get(`http://34.136.184.165:8080/api-gateway/documents/:email`);
+      const response = await axios.get(`http://34.136.184.165:8080/api-gateway/documents/${storedData.email}`);
       setDocuments(response.data)
     } catch (error) {
       console.error('Error al cargar los documentos:', error)
@@ -82,12 +82,12 @@ export const DocumentManager = ({user}) => {
     }
   }
 
-  const signDocument = async documentId => {
+  const signDocument = async (urlDocument, documentTitle) => {
     try {
       await axios.post(`http://34.136.184.165:8080/api-gateway/sign-document`, {
         idCitizen: storedData.identification,
-        urlDocument: '',
-        documentTitle: '',
+        urlDocument,
+        documentTitle,
         email: storedData.email,
       })
       // Update the documents list after signing
@@ -166,7 +166,7 @@ export const DocumentManager = ({user}) => {
                 </TableCell>
                 <TableCell>
                   <Tooltip content="Firmar">
-                    <button onClick={() => signDocument(document.id)}>
+                    <button onClick={() => signDocument(document.url, document.title)}>
                       <PencilSquareIcon className="h-5" />{' '}
                       {/* Icono para la acción de edición */}
                     </button>
