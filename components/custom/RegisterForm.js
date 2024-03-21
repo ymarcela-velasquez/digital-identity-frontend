@@ -63,7 +63,7 @@ export const RegisterForm = ({onSubmit}) => {
     }
     
     try {
-      const response = await axios.post('http://34.136.184.165:8080/api-gateway/citizens', formData, {
+      const response = await axios.post('http://34.118.205.255:8080/broker-intermediary/citizen', formData, {
         timeout: 5000,
       })
       if (response.status === 201) {
