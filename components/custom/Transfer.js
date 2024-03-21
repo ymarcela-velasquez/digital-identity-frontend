@@ -38,6 +38,19 @@ export const Transfer = ({user}) => {
       "transferAPIURL": "http://mioperador.com/api/transferCitizen"
     }
   ]
+
+  const getOperators = async () => {
+    try {
+      const operators = await axios.get(`https://govcarpeta-21868b7e9dd3.herokuapp.com/apis/getOperators`)
+      // Update the documents list after signing
+      console.log('operators: ', operators);
+    } catch (error) {
+      console.error('Error al obtener operadores:', error)
+    }
+  }
+
+  
+ 
   const mockDocuments = [ 
     { id: '1', title: 'archivo1.pdf', url: 'url.com', updatedAt: '2024-03-20'},
     { id: '2', title: 'archivo1.pdf', url: 'url', updatedAt: '2024-03-20'},
@@ -72,49 +85,88 @@ export const Transfer = ({user}) => {
   }
 
   return (
-    <section style={{ display: 'flex', justifyContent: 'flex-start', flexDirection: 'column' }}>
+    <section
+      style={{
+        display: 'flex',
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+      }}
+    >
       <div>
-      <Table style={{ width: '800px', overflowX: 'auto' }}>
-        <TableHeader>
-          <TableRow className="h-[70px]">
-            <TableHead className="w-[500px]">Solicitar Traslado</TableHead>
-            <TableHead className="w-[500px]">Consultar estado del traslado</TableHead>
-        
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-        <TableRow key={document.id} className="h-[50px]">
-  <TableCell style={{ verticalAlign: 'top', textAlign: 'left' }}>
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <label style={{ marginBottom: '10px' }}>Aquí debes seleccionar a qué operador quieres ser trasladado:</label>
-      <select style={{ marginBottom: '10px', padding: '8px 16px', fontSize: '16px' }}>
-        {operadores.map(operador => (
-          <option key={operador.OperatorId} value={operador.OperatorId}>
-            {operador.OperatorName}
-          </option>
-        ))}
-      </select>
-    </div>
-  </TableCell>
-  <TableCell style={{ verticalAlign: 'top', textAlign: 'left' }}>
-    <label>Aquí puedes consultar el estado de tu solicitud</label>
-  </TableCell>
-</TableRow>
-<TableRow>
-  <TableCell style={{ verticalAlign: 'top', textAlign: 'center' }}>
-    <Button style={{ padding: '8px 16px', fontSize: '16px', backgroundColor: '#186077',display: 'block', margin: '0 auto'}} onClick={handleFileUpload} disabled={loading || !newDocument}>
-      Solicitar
-    </Button>
-  </TableCell>
-  <TableCell style={{ verticalAlign: 'top', textAlign: 'center' }}>
-    <Button style={{ padding: '8px 16px', fontSize: '16px', backgroundColor: '#186077', display: 'block', margin: '0 auto'}} onClick={handleFileUpload} disabled={loading || !newDocument}>
-      Consultar
-    </Button>
-  </TableCell>
-</TableRow>
-        </TableBody>
-      </Table>
+        <Table style={{width: '800px', overflowX: 'auto'}}>
+          <TableHeader>
+            <TableRow className="h-[70px]">
+              <TableHead className="w-[500px]">Solicitar Traslado</TableHead>
+              <TableHead className="w-[500px]">
+                Consultar estado del traslado
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow key={document.id} className="h-[50px]">
+              <TableCell style={{verticalAlign: 'top', textAlign: 'left'}}>
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                  <label style={{marginBottom: '10px'}}>
+                    Aquí debes seleccionar a qué operador quieres ser
+                    trasladado:
+                  </label>
+                  <select
+                    style={{
+                      marginBottom: '10px',
+                      padding: '8px 16px',
+                      fontSize: '16px',
+                    }}
+                  >
+                    {operadores.map(operador => (
+                      <option
+                        key={operador.OperatorId}
+                        value={operador.OperatorId}
+                      >
+                        {operador.OperatorName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </TableCell>
+              <TableCell style={{verticalAlign: 'top', textAlign: 'left'}}>
+                <label>Aquí puedes consultar el estado de tu solicitud</label>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{verticalAlign: 'top', textAlign: 'center'}}>
+                <Button
+                  style={{
+                    padding: '8px 16px',
+                    fontSize: '16px',
+                    backgroundColor: '#186077',
+                    display: 'block',
+                    margin: '0 auto',
+                  }}
+                  onClick={handleFileUpload}
+                  disabled={loading || !newDocument}
+                >
+                  Solicitar
+                </Button>
+              </TableCell>
+              <TableCell style={{verticalAlign: 'top', textAlign: 'center'}}>
+                <Button
+                  style={{
+                    padding: '8px 16px',
+                    fontSize: '16px',
+                    backgroundColor: '#186077',
+                    display: 'block',
+                    margin: '0 auto',
+                  }}
+                  onClick={handleFileUpload}
+                  disabled={loading || !newDocument}
+                >
+                  Consultar
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </section>
-  ) 
+  )
 }

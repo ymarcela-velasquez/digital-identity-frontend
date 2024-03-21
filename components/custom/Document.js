@@ -69,64 +69,110 @@ export const DocumentManager = ({user}) => {
   }
 
   return (
-    <section style={{ display: 'flex', justifyContent: 'flex-start', flexDirection: 'column' }}>
+    <section
+      style={{
+        display: 'flex',
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+      }}
+    >
       <div>
-      <Table style={{ width: '800px', overflowX: 'auto' }}>
-        <TableHeader>
-          <TableRow className="h-[50px]">
-            <TableHead className="w-[300px]">Documento</TableHead>
-            <TableHead className="w-[400px]">Url</TableHead>
-            <TableHead className="text-left w-[300px]">Fecha de actualización</TableHead>
-            <TableHead className="text-left w-[300px]">Acciones</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {mockDocuments.map((document) => (
-            <TableRow key={document.id} className="h-[50px]">
-         <TableCell className="text-left">{document.title}</TableCell>
-      <TableCell className="text-left">{document.url}</TableCell>
-      <TableCell className="text-left">{document.updatedAt}</TableCell>
-      <TableCell>
-      <Tooltip content="Firmar">
-      <button onClick={() => signDocument(document.id)}>
-      <PencilSquareIcon className="h-5" /> {/* Icono para la acción de edición */}
-      </button>
-    </Tooltip>
-    <Tooltip content="Descargar">
-     <button onClick={() => downloadDocument(document.id)}>
-      <ArrowDownOnSquareIcon className="h-5 ml-4" /> {/* Icono para la acción de descarga */}
-      </button>
-      </Tooltip>
-      <Tooltip content="Eliminar">
-      <button onClick={() => downloadDocument(document.id)}>
-      <ArchiveBoxXMarkIcon className="h-5 ml-4" /> {/* Icono para la acción de descarga */}
-      </button>
-      </Tooltip>
-      </TableCell>
-     
+        <Table style={{width: '800px', overflowX: 'auto'}}>
+          <TableHeader>
+            <TableRow className="h-[50px]">
+              <TableHead className="w-[300px]">Documento</TableHead>
+              <TableHead className="w-[400px]">Url</TableHead>
+              <TableHead className="text-left w-[300px]">
+                Fecha de actualización
+              </TableHead>
+              <TableHead className="text-left w-[300px]">Acciones</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {mockDocuments.map(document => (
+              <TableRow key={document.id} className="h-[50px]">
+                <TableCell className="text-left">{document.title}</TableCell>
+                <TableCell className="text-left">{document.url}</TableCell>
+                <TableCell className="text-left">
+                  {document.updatedAt}
+                </TableCell>
+                <TableCell>
+                  <Tooltip content="Firmar">
+                    <button onClick={() => signDocument(document.id)}>
+                      <PencilSquareIcon className="h-5" />{' '}
+                      {/* Icono para la acción de edición */}
+                    </button>
+                  </Tooltip>
+                  <Tooltip content="Descargar">
+                    <button onClick={() => downloadDocument(document.id)}>
+                      <ArrowDownOnSquareIcon className="h-5 ml-4" />{' '}
+                      {/* Icono para la acción de descarga */}
+                    </button>
+                  </Tooltip>
+                  <Tooltip content="Eliminar">
+                    <button onClick={() => downloadDocument(document.id)}>
+                      <ArchiveBoxXMarkIcon className="h-5 ml-4" />{' '}
+                      {/* Icono para la acción de descarga */}
+                    </button>
+                  </Tooltip>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
 
-      <div style={{marginTop: '2%', backgroundColor: '#f2f2f2', padding: '20px',  display: 'flex', justifyContent: 'flex-start', flexDirection: 'column'}}>
-  <h3 style={{marginBottom: '10px', color: '#333',  fontWeight: 'bold'}}>Agregar nuevo documento</h3>
-  <label style={{color: '#333', marginBottom: '10px'}}>Se aceptan archivos PDF, .doc, .docx</label>
-  <div>
-  <label htmlFor="fileInput" style={{cursor: 'pointer', padding: '8px 16px', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#fff', color: '#333'}}>Elegir archivo</label>
-  <input
-    id="fileInput"
-    type="file"
-    style={{display: 'none'}}
-    onChange={(e) => setNewDocument(e.target.files[0])}
-    accept=".pdf,.doc,.docx"
-  />
-  <Button style={{marginLeft: '20px', padding: '8px 16px', fontSize: '16px', backgroundColor: '#186077'}} onClick={handleFileUpload} disabled={loading || !newDocument}>
-    {loading ? 'Cargando...' : 'Enviar archivo'}
-  </Button>
-  </div>
-</div>
+      <div
+        style={{
+          marginTop: '2%',
+          backgroundColor: '#f2f2f2',
+          padding: '20px',
+          display: 'flex',
+          justifyContent: 'flex-start',
+          flexDirection: 'column',
+        }}
+      >
+        <h3 style={{marginBottom: '10px', color: '#333', fontWeight: 'bold'}}>
+          Agregar nuevo documento
+        </h3>
+        <label style={{color: '#333', marginBottom: '10px'}}>
+          Se aceptan archivos PDF, .doc, .docx
+        </label>
+        <div>
+          <label
+            htmlFor="fileInput"
+            style={{
+              cursor: 'pointer',
+              padding: '8px 16px',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              backgroundColor: '#fff',
+              color: '#333',
+            }}
+          >
+            Elegir archivo
+          </label>
+          <input
+            id="fileInput"
+            type="file"
+            style={{display: 'none'}}
+            onChange={e => setNewDocument(e.target.files[0])}
+            accept=".pdf,.doc,.docx"
+          />
+          <Button
+            style={{
+              marginLeft: '20px',
+              padding: '8px 16px',
+              fontSize: '16px',
+              backgroundColor: '#186077',
+            }}
+            onClick={handleFileUpload}
+            disabled={loading || !newDocument}
+          >
+            {loading ? 'Cargando...' : 'Enviar archivo'}
+          </Button>
+        </div>
+      </div>
     </section>
-  ) 
+  )
 }

@@ -49,7 +49,7 @@ export const LoginForm = () => {
             <FormField
               control={form.control}
               name="email"
-              render={({ field }) => (
+              render={({field}) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
@@ -62,17 +62,27 @@ export const LoginForm = () => {
             <FormField
               control={form.control}
               name="password"
-              render={({ field }) => (
+              render={({field}) => (
                 <FormItem>
                   <FormLabel>Contraseña</FormLabel>
                   <FormControl>
-                    <Input placeholder="Password" type='password' {...field} />
+                    <Input placeholder="Password" type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Enviar</Button>
+            <Button
+              style={{
+                marginLeft: '90px',
+                padding: '8px 16px',
+                fontSize: '16px',
+                backgroundColor: '#186077',
+              }}
+              type="submit"
+            >
+              Enviar
+            </Button>
           </form>
         </Form>
       </section>

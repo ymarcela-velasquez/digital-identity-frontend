@@ -1,10 +1,10 @@
 "use client"
 import { useState } from 'react';
 import axios from 'axios'
-import { RegisterForm } from '@/components/custom/RegisterForm';
+import { ValidateUserForm } from '@/components/custom/ValidateUserForm';
 // import { useRouter } from 'next/navigation'
 
-export default function RegisterPage() {
+export default function ValidateUserPage() {
   // const router = useRouter()
   // const [user, setUser] = useState([])
   // const registerUser = async (formData) => {
@@ -25,7 +25,7 @@ export default function RegisterPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className='App'>
-        <RegisterForm />
+        <ValidateUserForm  />
       </div>
     </main>
   );
