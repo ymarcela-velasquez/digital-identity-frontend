@@ -1,6 +1,7 @@
 "use client"
 
 import { z } from "zod"
+import { useRouter } from 'next/navigation'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
@@ -30,15 +31,15 @@ export const LoginForm = () => {
       password: "",
     },
   })
- 
-  // 2. Define a submit handler.
+
+  const router = useRouter();
   function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    //TODO: Hacer aqui validacion con Firebase Authentication y dejar pasar o no al User al Dashboard
-    console.log(values)
-  }
+    // Hacer algo con los valores del formulario.
+    console.log(values);
   
+    // Redirigir al usuario al dashboard.
+    router.push('/dashboard');
+  }
   {
     return (
       <section>

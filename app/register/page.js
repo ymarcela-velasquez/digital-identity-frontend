@@ -4,11 +4,13 @@ import axios from 'axios'
 import { RegisterForm } from '@/components/custom/RegisterForm';
 
 export default function RegisterPage() {
-  const [user, setUser] = useState([])
+  // const [user, setUser] = useState([])
   const registerUser = async (formData) => {
-    console.log('entra registerUser');
+    console.log('entra registerUser', formData);
     try {
-      const user = await axios.post('http://localhost:8080/citizens', formData)
+      const user = await axios.post('http://localhost:8080/broker-intermediary/citizen', formData, {
+        timeout: 5000,
+      })
       console.log('user: ', user);
     } catch (error) {
       console.log('error: ', error);

@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useRouter } from 'next/navigation'
 import Link from 'next/link';
 import Image from "next/image";
 import logo from '@/public/assets/identidad.png';
@@ -30,9 +31,8 @@ const formSchema = z.object({
   password: z.string().min(7, {message: "La contraseña debe contener al menos 7 caracteres."}).max(15)
 })
 
-
 export const RegisterForm = ({onSubmit}) => {
-
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,12 +48,27 @@ export const RegisterForm = ({onSubmit}) => {
     },
   })
  
-  // Define a submit handler.
-  function handleOnSubmit(data) {    
-    console.log(data)
-    onSubmit(data)
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault(); // Prevenir el envío predeterminado del formulario
+    const formData = {
+      identification: form.getValues("identification"),
+      identificationType: form.getValues("identificationType"),
+      firstName: form.getValues("firstName"),
+      secondName: form.getValues("secondName") || "",
+      lastName: form.getValues("lastName"),
+      secondLastName: form.getValues("secondLastName") || "",
+      address: form.getValues("address"),
+      email: form.getValues("email"),
+      password: form.getValues("password"),
+      phone: "", // Este campo no se encuentra en el formulario, se deja vacío
+      status: "ALIVE"
+    }
+    console.log('formData',formData)
+    onSubmit(formData);
+    // router.push('/dashboard')
   }
-  
+  console.log('form', form)
   {
     return (
       <section>
@@ -69,7 +84,7 @@ export const RegisterForm = ({onSubmit}) => {
         </div>
         <h1>Complete el siguiente formulario</h1>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleOnSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit} className="space-y-8">
           <FormField
               control={form.control}
               name="Identification"
@@ -187,7 +202,7 @@ export const RegisterForm = ({onSubmit}) => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Registrarse</Button>
+            <Button onClick={handleFormSubmit} type="submit">Registrarse</Button>
           </form>
         </Form>
       </section>

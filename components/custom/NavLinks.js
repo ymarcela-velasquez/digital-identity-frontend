@@ -5,17 +5,18 @@ import {
   DocumentDuplicateIcon,
   ArrowsRightLeftIcon,
   Cog8ToothIcon,
-  TrophyIcon
+  TrophyIcon,
+  
 } from '@heroicons/react/24/outline';
 import Link from "next/link"
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-  { name: 'Services', href: '/dashboard/services',icon: Cog8ToothIcon },
-  { name: 'Documents', href: '/dashboard/documents', icon: DocumentDuplicateIcon },
-  { name: 'Transfers', href: '/dashboard/transfers', icon: ArrowsRightLeftIcon },
-  { name: 'Contests', href: '/dashboard/contests', icon: TrophyIcon },
+  { name: 'Servicios', href: '/dashboard/services',icon: Cog8ToothIcon },
+  { name: 'Documentos', href: '/dashboard/documents', icon: DocumentDuplicateIcon },
+  { name: 'Traslados', href: '/dashboard/transfers', icon: ArrowsRightLeftIcon },
+  { name: 'Concursos', href: '/dashboard/contests', icon: TrophyIcon },
 ]
 
 export default function NavLinks() {
